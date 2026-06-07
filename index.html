@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nathan Merch Co. — Graphic Apparel & Merchandise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #141414;
+    --bg2: #1c1c1c;
+    --bg3: #242424;
+    --text: #f0ede8;
+    --muted: rgba(240,237,232,0.45);
+    --accent: #ff5c1a;
+    --accent2: #1a8fff;
+    --border: rgba(240,237,232,0.08);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(20,20,20,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.06em; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { background: var(--accent); color: #fff; padding: 8px 20px; border-radius: 4px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: #e04a0a; }
+
+  /* =====================
+     PAGE SYSTEM — CSS :target based (no JS required to show/hide pages)
+     ===================== */
+  .page { display: none; padding-top: 70px; min-height: 100vh; }
+
+  /* Show the targeted page */
+  #page-home:target,
+  #page-about:target,
+  #page-products:target,
+  #page-contact:target,
+  #page-faq:target,
+  #page-privacy:target,
+  #page-terms:target { display: block; }
+
+  /* Show home by default when no hash is present */
+  #page-home { display: block; }
+
+  /* Hide home when any other page is targeted */
+  body:has(#page-about:target) #page-home,
+  body:has(#page-products:target) #page-home,
+  body:has(#page-contact:target) #page-home,
+  body:has(#page-faq:target) #page-home,
+  body:has(#page-privacy:target) #page-home,
+  body:has(#page-terms:target) #page-home { display: none; }
+
+  /* HERO */
+  .hero {
+    min-height: calc(100vh - 70px);
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 4rem 2.5rem;
+    gap: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,92,26,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(56px, 8vw, 96px); line-height: 0.95; letter-spacing: 0.02em; color: var(--text); margin-bottom: 1.5rem; }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero-sub { font-size: 16px; color: var(--muted); line-height: 1.8; max-width: 440px; margin-bottom: 2.5rem; font-weight: 300; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 14px 28px; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 4px; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-accent { background: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #e04a0a; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--text); border: 1px solid rgba(240,237,232,0.25); }
+  .btn-outline:hover { border-color: var(--text); }
+  .hero-visual { position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hero-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1.25rem; display: flex; flex-direction: column; gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .hero-card:hover { border-color: rgba(255,92,26,0.3); }
+  .hero-card-icon { font-size: 32px; }
+  .hero-card-name { font-size: 14px; font-weight: 500; }
+  .hero-card-desc { font-size: 12px; color: var(--muted); }
+  .hero-card.featured { grid-column: span 2; background: var(--bg3); flex-direction: row; align-items: center; gap: 1rem; }
+  .hero-badge { background: var(--accent); color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; display: inline-block; margin-bottom: 4px; }
+  .hero-stats { display: flex; gap: 2rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .stat-val { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.04em; color: var(--text); }
+  .stat-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* SECTIONS */
+  .section { padding: 5rem 2.5rem; }
+  .section-sm { padding: 3rem 2.5rem; }
+  .section-dark { background: var(--bg2); }
+  .section-header { margin-bottom: 3rem; }
+  .section-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+  .section-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 56px); letter-spacing: 0.03em; line-height: 1; }
+  .section-sub { font-size: 15px; color: var(--muted); max-width: 520px; margin-top: 0.75rem; font-weight: 300; }
+
+  /* COLLECTIONS */
+  .collections-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .coll-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 2rem 1.25rem; text-align: center; cursor: pointer;
+    transition: all 0.25s; text-decoration: none; display: block; color: inherit;
+  }
+  .coll-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .coll-card-icon { font-size: 40px; margin-bottom: 1rem; }
+  .coll-card-name { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .coll-card-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* WHY CHOOSE US */
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .why-card {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 2rem; position: relative; overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .why-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent); }
+  .why-card:hover { border-color: rgba(255,92,26,0.4); }
+  .why-icon { font-size: 32px; margin-bottom: 1rem; }
+  .why-title { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; margin-bottom: 8px; }
+  .why-desc { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+  /* PRODUCTS GRID */
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .prod-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: all 0.25s; }
+  .prod-card:hover { border-color: rgba(255,92,26,0.3); transform: translateY(-3px); }
+  .prod-img {
+    height: 220px;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--bg3);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .prod-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.35), transparent);
+  }
+  .prod-tag { position: absolute; top: 12px; left: 12px; z-index: 2; background: var(--accent); color: #fff; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; }
+  .prod-body { padding: 1.25rem; }
+  .prod-name { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .prod-cat { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .prod-desc { font-size: 13px; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; font-weight: 300; }
+  .prod-footer { display: flex; justify-content: space-between; align-items: center; }
+  .prod-price { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.04em; }
+  .prod-btn { background: var(--accent); color: #fff; border: none; padding: 8px 16px; border-radius: 4px; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .prod-btn:hover { background: #e04a0a; }
+
+  /* CTA BANNER */
+  .cta-banner {
+    background: var(--accent); padding: 4rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap;
+  }
+  .cta-banner h2 { font-family: var(--font-display); font-size: clamp(28px, 4vw, 48px); letter-spacing: 0.03em; color: #fff; max-width: 560px; line-height: 1.1; }
+  .cta-banner p { font-size: 14px; color: rgba(255,255,255,0.75); margin-top: 8px; font-weight: 300; }
+  .btn-white { background: #fff; color: var(--accent); }
+  .btn-white:hover { background: #f0ede8; transform: translateY(-1px); }
+
+  /* ABOUT */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-img { border: 1px solid var(--border); border-radius: 8px; height: 360px; background-size: cover; background-position: center; }
+  .about-text p { font-size: 15px; color: var(--muted); line-height: 1.85; font-weight: 300; margin-bottom: 1.25rem; }
+  .about-text h3 { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.04em; margin-bottom: 1rem; margin-top: 2rem; }
+  .values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem; }
+  .value-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.25rem; }
+  .value-name { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .value-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; }
+  .contact-info h3 { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.04em; margin-bottom: 1rem; }
+  .contact-info p { font-size: 14px; color: var(--muted); line-height: 1.8; font-weight: 300; margin-bottom: 2rem; }
+  .contact-item { display: flex; align-items: center; gap: 12px; padding: 1rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; }
+  .contact-item-icon { font-size: 20px; }
+  .contact-item-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+  .contact-item-val { font-size: 14px; font-weight: 500; }
+  .contact-form { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 2rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .form-group input, .form-group textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); font-family: var(--font-body); font-size: 14px;
+    padding: 12px 14px; border-radius: 4px; outline: none; transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { min-height: 120px; }
+  .form-success { display: none; background: rgba(26,143,255,0.1); border: 1px solid rgba(26,143,255,0.3); color: #1a8fff; padding: 12px 16px; border-radius: 6px; font-size: 14px; margin-top: 1rem; }
+
+  /* FAQ */
+  .faq-list { max-width: 720px; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-q {
+    width: 100%; background: none; border: none; color: var(--text);
+    font-family: var(--font-body); font-size: 15px; font-weight: 500;
+    padding: 1.25rem 0; text-align: left; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-icon { font-size: 20px; color: var(--accent); flex-shrink: 0; transition: transform 0.2s; }
+  .faq-a { font-size: 14px; color: var(--muted); line-height: 1.8; font-weight: 300; padding-bottom: 1.25rem; display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* LEGAL */
+  .legal-content { max-width: 720px; }
+  .legal-content h2 { font-family: var(--font-display); font-size: 28px; letter-spacing: 0.04em; margin: 2rem 0 0.75rem; }
+  .legal-content h2:first-child { margin-top: 0; }
+  .legal-content p { font-size: 14px; color: var(--muted); line-height: 1.85; font-weight: 300; margin-bottom: 1rem; }
+  .legal-content ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+  .legal-content li { font-size: 14px; color: var(--muted); line-height: 1.8; font-weight: 300; }
+
+  /* FOOTER */
+  footer { background: #0d0d0d; border-top: 1px solid var(--border); padding: 3rem 2.5rem 2rem; }
+  .footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .nav-logo { display: inline-block; margin-bottom: 1rem; }
+  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; max-width: 240px; }
+  .footer-col h4 { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); margin-bottom: 1rem; }
+  .footer-col a { display: block; font-size: 13px; color: var(--muted); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-copy { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+  .footer-accent { font-size: 12px; color: var(--accent); font-family: var(--font-mono); }
+
+  /* PAGE HEADER */
+  .page-header { padding: 3rem 2.5rem 2rem; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+  .page-header .section-eyebrow { margin-bottom: 0.5rem; }
+  .page-header h1 { font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px); letter-spacing: 0.03em; line-height: 1; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero h1 { animation: fadeUp 0.6s ease both; }
+  .hero-sub { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-btns { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-stats { animation: fadeUp 0.6s 0.3s ease both; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .hero { grid-template-columns: 1fr; padding: 2rem 1.25rem; }
+    .hero-visual { display: none; }
+    .collections-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-grid { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .section { padding: 3rem 1.25rem; }
+    .page-header { padding: 2rem 1.25rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#page-home">NATHAN <span>MERCH CO.</span></a>
+  <div class="nav-links">
+    <a href="#page-home">Home</a>
+    <a href="#page-about">About</a>
+    <a href="#page-products">Products</a>
+    <a href="#page-faq">FAQ</a>
+    <a href="#page-contact">Contact</a>
+    <a class="nav-cta" href="#page-products">Shop Now</a>
+  </div>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page" id="page-home">
+
+  <section class="hero">
+    <div>
+      <div class="hero-tag">// Print-on-Demand Apparel & Merch</div>
+      <h1>WEAR DESIGNS<br>THAT <em>STAND</em><br>OUT</h1>
+      <p class="hero-sub">Original graphic apparel and merchandise designed for creativity, self-expression, and everyday style.</p>
+      <div class="hero-btns">
+        <a class="btn btn-accent" href="#page-products">Shop Collection</a>
+        <a class="btn btn-outline" href="#page-contact">Contact Us</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-val">100+</div><div class="stat-lbl">Designs</div></div>
+        <div><div class="stat-val">4.9★</div><div class="stat-lbl">Rating</div></div>
+        <div><div class="stat-val">50+</div><div class="stat-lbl">Countries</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-grid">
+        <div class="hero-card featured">
+          <div style="font-size:48px">👕</div>
+          <div>
+            <div class="hero-badge">New Drop</div>
+            <div style="font-size:16px;font-weight:500;margin-bottom:4px">Urban Graphic Series</div>
+            <div style="font-size:13px;color:var(--muted)">Bold designs for bold people</div>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-icon">🎨</div>
+          <div class="hero-card-name">Original Art</div>
+          <div class="hero-card-desc">Every design is unique</div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-icon">🌍</div>
+          <div class="hero-card-name">Ships Globally</div>
+          <div class="hero-card-desc">50+ countries covered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-eyebrow">// Browse Categories</div>
+      <h2 class="section-title">FEATURED COLLECTIONS</h2>
+    </div>
+    <div class="collections-grid">
+      <a class="coll-card" href="#page-products">
+        <div class="coll-card-icon">👕</div>
+        <div class="coll-card-name">GRAPHIC T-SHIRTS</div>
+        <div class="coll-card-desc">Comfortable and stylish designs for everyday wear</div>
+      </a>
+      <a class="coll-card" href="#page-products">
+        <div class="coll-card-icon">🧥</div>
+        <div class="coll-card-name">HOODIES</div>
+        <div class="coll-card-desc">Premium designs made for comfort and expression</div>
+      </a>
+      <a class="coll-card" href="#page-products">
+        <div class="coll-card-icon">👔</div>
+        <div class="coll-card-name">SWEATSHIRTS</div>
+        <div class="coll-card-desc">Modern graphic apparel for every season</div>
+      </a>
+      <a class="coll-card" href="#page-products">
+        <div class="coll-card-icon">🎒</div>
+        <div class="coll-card-name">ACCESSORIES</div>
+        <div class="coll-card-desc">Unique products featuring original artwork</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">// Our Promise</div>
+      <h2 class="section-title">WHY CHOOSE US</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🎨</div>
+        <div class="why-title">ORIGINAL DESIGNS</div>
+        <div class="why-desc">Every piece is crafted by our in-house designers. You won't find these graphics anywhere else — each design tells a story.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌎</div>
+        <div class="why-title">GLOBAL AVAILABILITY</div>
+        <div class="why-desc">We ship to over 50 countries through trusted print-on-demand partners. Wherever you are, your order reaches you.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⭐</div>
+        <div class="why-title">QUALITY PRODUCTS</div>
+        <div class="why-desc">We use premium materials and trusted production partners to ensure every item meets the highest standard of quality.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-eyebrow">// Our Products</div>
+      <h2 class="section-title">FEATURED PRODUCTS</h2>
+      <p class="section-sub">Handpicked favorites from our latest collections.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('download.jpg');"><span class="prod-tag">New</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Graphic T-Shirts</div>
+          <div class="prod-name">Urban Sketch Tee</div>
+          <div class="prod-desc">Bold line-art print on premium 100% cotton. Relaxed fit.</div>
+          <div class="prod-footer"><span class="prod-price">$29</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('photo_2026-06-05_23-41-10.jpg');"><span class="prod-tag">Popular</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Hoodies</div>
+          <div class="prod-name">Midnight Graphic Hoodie</div>
+          <div class="prod-desc">Heavyweight fleece hoodie with a front chest print.</div>
+          <div class="prod-footer"><span class="prod-price">$55</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('photo_2026-06-05_23-44-25.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Sweatshirts</div>
+          <div class="prod-name">Abstract Crewneck</div>
+          <div class="prod-desc">Soft crew-neck sweatshirt featuring geometric artwork.</div>
+          <div class="prod-footer"><span class="prod-price">$45</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Gojo Tote Bags, Gojo Tote Bags.jpg');"><span class="prod-tag">New</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Accessories</div>
+          <div class="prod-name">Art Print Tote Bag</div>
+          <div class="prod-desc">Canvas tote with an exclusive original graphic print.</div>
+          <div class="prod-footer"><span class="prod-price">$22</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Camiseta Oversized Anime Preta Estampa Exclusiva – Estilo Streetwear Unissex.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Graphic T-Shirts</div>
+          <div class="prod-name">Retro Wave Tee</div>
+          <div class="prod-desc">Vintage-inspired sunset graphic on a soft-washed tee.</div>
+          <div class="prod-footer"><span class="prod-price">$29</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('NY Caps — Classic Yankees Snapback for NYC Streetwear.jpg');"><span class="prod-tag">Popular</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Accessories</div>
+          <div class="prod-name">Embroidered Cap</div>
+          <div class="prod-desc">Structured 6-panel cap with embroidered logo design.</div>
+          <div class="prod-footer"><span class="prod-price">$28</span><button class="prod-btn">View</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div>
+      <h2>DISCOVER DESIGNS CREATED TO INSPIRE</h2>
+      <p>Unique apparel and merchandise that lets you express who you are.</p>
+    </div>
+    <a class="btn btn-white" href="#page-products">Shop the Collection →</a>
+  </div>
+
+</div>
+
+<!-- ===== ABOUT PAGE ===== -->
+<div class="page" id="page-about">
+  <div class="page-header">
+    <div class="section-eyebrow">// Our Story</div>
+    <h1>ABOUT US</h1>
+  </div>
+  <section class="section">
+    <div class="about-grid">
+      <div class="about-img" style="background-image:url('Abous Us img.jpg'); background-size:cover; background-position:center;"></div>
+      <div class="about-text">
+        <div class="section-eyebrow">// Who We Are</div>
+        <h3>OUR STORY</h3>
+        <p>Founded with a passion for graphic design and creative expression, Nathan Merch Co. creates unique artwork that transforms everyday apparel into something meaningful and memorable.</p>
+        <p>We believe that what you wear is an extension of who you are. That's why every design we create starts with a story — a feeling, an idea, a moment — and ends on something you're proud to put on.</p>
+        <p>Through global print-on-demand platforms, we make it possible for anyone, anywhere to wear original art on high-quality products delivered right to their door.</p>
+        <h3>OUR MISSION</h3>
+        <p>To provide high-quality graphic merchandise that allows customers to showcase their personality, interests, and creativity — without compromise.</p>
+        <h3>OUR VALUES</h3>
+        <div class="values-grid">
+          <div class="value-item">
+            <div class="value-name">Creativity</div>
+            <div class="value-desc">Every product starts with an original idea and thoughtful design.</div>
+          </div>
+          <div class="value-item">
+            <div class="value-name">Quality</div>
+            <div class="value-desc">We never compromise on materials, printing, or production standards.</div>
+          </div>
+          <div class="value-item">
+            <div class="value-name">Customer Satisfaction</div>
+            <div class="value-desc">Your experience matters — from browsing to delivery and beyond.</div>
+          </div>
+          <div class="value-item">
+            <div class="value-name">Originality</div>
+            <div class="value-desc">All artwork is created in-house. No templates, no shortcuts.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PRODUCTS PAGE ===== -->
+<div class="page" id="page-products">
+  <div class="page-header">
+    <div class="section-eyebrow">// Shop</div>
+    <h1>OUR COLLECTIONS</h1>
+  </div>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-eyebrow">// Category</div>
+      <h2 class="section-title">GRAPHIC T-SHIRTS</h2>
+      <p class="section-sub">Comfortable and stylish designs for everyday wear.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('download.jpg');"><span class="prod-tag">New</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Graphic T-Shirts</div>
+          <div class="prod-name">Urban Sketch Tee</div>
+          <div class="prod-desc">Bold line-art print on premium 100% cotton. Relaxed fit, available S–2XL.</div>
+          <div class="prod-footer"><span class="prod-price">$29</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Camiseta Oversized Anime Preta Estampa Exclusiva – Estilo Streetwear Unissex.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Graphic T-Shirts</div>
+          <div class="prod-name">Retro Wave Tee</div>
+          <div class="prod-desc">Vintage-inspired sunset graphic on a soft-washed, unisex tee.</div>
+          <div class="prod-footer"><span class="prod-price">$29</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('zanzea _ women fashion outfits.jpg');"><span class="prod-tag">Popular</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Graphic T-Shirts</div>
+          <div class="prod-name">Minimal Type Tee</div>
+          <div class="prod-desc">Clean typographic design on breathable cotton. Statement piece.</div>
+          <div class="prod-footer"><span class="prod-price">$27</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">// Category</div>
+      <h2 class="section-title">HOODIES</h2>
+      <p class="section-sub">Premium designs made for comfort and expression.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('photo_2026-06-05_23-47-21.jpg');"><span class="prod-tag">Popular</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Hoodies</div>
+          <div class="prod-name">Midnight Graphic Hoodie</div>
+          <div class="prod-desc">Heavyweight fleece hoodie with a bold front chest print. Kangaroo pocket.</div>
+          <div class="prod-footer"><span class="prod-price">$55</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('photo_2026-06-05_23-50-10.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Hoodies</div>
+          <div class="prod-name">Oversized Zip Hoodie</div>
+          <div class="prod-desc">Relaxed zip-up hoodie with sleeve print and back graphic.</div>
+          <div class="prod-footer"><span class="prod-price">$60</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-dark">
+    <div class="section-header">
+      <div class="section-eyebrow">// Category</div>
+      <h2 class="section-title">SWEATSHIRTS</h2>
+      <p class="section-sub">Modern graphic apparel for every season.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Denim & Flower Sweaters _ Denim & Flower By Ricky Singh Cream Graphic Sweatshirt Size Large Nwt _ Color_ Cream _ Size_ L.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Sweatshirts</div>
+          <div class="prod-name">Abstract Crewneck</div>
+          <div class="prod-desc">Soft crew-neck sweatshirt featuring geometric original artwork.</div>
+          <div class="prod-footer"><span class="prod-price">$45</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('https://images.unsplash.com/photo-1609873814058-a8928924184a?auto=format&fit=crop&w=900&q=80');"><span class="prod-tag">New</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Sweatshirts</div>
+          <div class="prod-name">Brushstroke Pullover</div>
+          <div class="prod-desc">Hand-painted inspired brushstroke art on a cozy pullover.</div>
+          <div class="prod-footer"><span class="prod-price">$48</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">// Category</div>
+      <h2 class="section-title">ACCESSORIES</h2>
+      <p class="section-sub">Unique products featuring original artwork.</p>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Gojo Tote Bags, Gojo Tote Bags.jpg');"><span class="prod-tag">New</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Accessories</div>
+          <div class="prod-name">Art Print Tote Bag</div>
+          <div class="prod-desc">Heavy-duty canvas tote with an exclusive original graphic.</div>
+          <div class="prod-footer"><span class="prod-price">$22</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('NY Caps — Classic Yankees Snapback for NYC Streetwear.jpg');"><span class="prod-tag">Popular</span></div>
+        <div class="prod-body">
+          <div class="prod-cat">Accessories</div>
+          <div class="prod-name">Embroidered Cap</div>
+          <div class="prod-desc">Structured 6-panel cap with embroidered logo and clean finish.</div>
+          <div class="prod-footer"><span class="prod-price">$28</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-img" style="background-image:url('Phone Case.jpg');"></div>
+        <div class="prod-body">
+          <div class="prod-cat">Accessories</div>
+          <div class="prod-name">Graphic Phone Case</div>
+          <div class="prod-desc">Durable matte case with a full-wrap original illustration.</div>
+          <div class="prod-footer"><span class="prod-price">$18</span><button class="prod-btn">Shop</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== CONTACT PAGE ===== -->
+<div class="page" id="page-contact">
+  <div class="page-header">
+    <div class="section-eyebrow">// Get In Touch</div>
+    <h1>CONTACT US</h1>
+  </div>
+  <section class="section">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>WE'D LOVE TO HEAR FROM YOU</h3>
+        <p>Have a question about an order, a custom design request, or just want to say hello? Reach out and we'll get back to you within 24 hours.</p>
+        <div class="contact-item">
+          <div class="contact-item-icon">✉️</div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-val">nathanandualem57@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">🌍</div>
+          <div>
+            <div class="contact-item-label">Availability</div>
+            <div class="contact-item-val">Worldwide — 50+ Countries</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">⏱️</div>
+          <div>
+            <div class="contact-item-label">Response Time</div>
+            <div class="contact-item-val">Within 24 hours</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form">
+        <div class="section-eyebrow" style="margin-bottom:1.25rem">// Send a Message</div>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="contact-name" placeholder="e.g. Alex Johnson">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="contact-email" placeholder="you@email.com">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="contact-msg" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+        <button class="btn btn-accent" style="width:100%" onclick="submitForm()">Send Message</button>
+        <div class="form-success" id="form-success">✓ Message sent! We'll be in touch within 24 hours.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== FAQ PAGE ===== -->
+<div class="page" id="page-faq">
+  <div class="page-header">
+    <div class="section-eyebrow">// Help Center</div>
+    <h1>FAQ</h1>
+  </div>
+  <section class="section">
+    <div class="faq-list">
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is print-on-demand?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Print-on-demand (POD) is a fulfillment model where products are only produced after an order is placed. This means no excess inventory, fresher designs, and high-quality production for every item. Your product is printed and shipped directly from a production facility to your door.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Where do you ship?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">We ship to over 50 countries worldwide through our trusted print-on-demand partners. During checkout, you can confirm whether your country is available. Most major regions including North America, Europe, Asia, and Africa are supported.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How are products made?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Each product is made to order using direct-to-garment (DTG) printing or embroidery, depending on the item. We partner with certified print-on-demand facilities that use premium inks and quality-checked blanks. Every order goes through a quality inspection before shipping.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How can I contact support?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">You can reach our support team by emailing nathanandualem57@gmail.com or by using the contact form on our Contact page. We typically respond within 24 hours on business days. For urgent issues, please include your order number in the subject line.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How long does delivery take?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Production typically takes 2–5 business days. Shipping times vary by region: US and Canada usually receive orders within 5–10 business days, while international orders may take 10–20 business days. You'll receive a tracking number once your order ships.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PRIVACY PAGE ===== -->
+<div class="page" id="page-privacy">
+  <div class="page-header">
+    <div class="section-eyebrow">// Legal</div>
+    <h1>PRIVACY POLICY</h1>
+  </div>
+  <section class="section">
+    <div class="legal-content">
+      <p>Last updated: June 2026</p>
+      <h2>Information We Collect</h2>
+      <p>We collect information you provide directly to us when making a purchase or contacting us, including your name, email address, shipping address, and payment information. We also collect certain information automatically when you visit our website.</p>
+      <h2>How We Use Your Information</h2>
+      <ul>
+        <li>To process and fulfill your orders</li>
+        <li>To communicate with you about your order status</li>
+        <li>To respond to your inquiries and support requests</li>
+        <li>To send promotional communications (with your consent)</li>
+        <li>To improve our website and services</li>
+      </ul>
+      <h2>Sharing Your Information</h2>
+      <p>We do not sell or rent your personal information to third parties. We share your information only with trusted service providers necessary to fulfill your orders (such as our print-on-demand and shipping partners) and as required by law.</p>
+      <h2>Data Security</h2>
+      <p>We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. However, no internet-based service is completely secure.</p>
+      <h2>Cookies</h2>
+      <p>We use cookies to improve your browsing experience and analyze website traffic. You can control cookie settings through your browser preferences.</p>
+      <h2>Your Rights</h2>
+      <p>You have the right to access, correct, or delete your personal information at any time. To exercise these rights, contact us at nathanandualem57@gmail.com.</p>
+      <h2>Contact Us</h2>
+      <p>If you have questions about this Privacy Policy, please contact us at nathanandualem57@gmail.com.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== TERMS PAGE ===== -->
+<div class="page" id="page-terms">
+  <div class="page-header">
+    <div class="section-eyebrow">// Legal</div>
+    <h1>TERMS OF SERVICE</h1>
+  </div>
+  <section class="section">
+    <div class="legal-content">
+      <p>Last updated: June 2026</p>
+      <h2>Acceptance of Terms</h2>
+      <p>By accessing or using our website, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.</p>
+      <h2>Products and Orders</h2>
+      <p>All products are made to order. We reserve the right to refuse or cancel any order at our discretion. Prices are subject to change without notice. Product images are for illustrative purposes and actual products may vary slightly.</p>
+      <h2>Intellectual Property</h2>
+      <p>All designs, artwork, and content on this website are the exclusive property of Nathan Merch Co. and are protected by copyright law. You may not reproduce, distribute, or use our designs without explicit written permission.</p>
+      <h2>Returns and Refunds</h2>
+      <p>Since all products are made to order, we only accept returns or issue refunds for defective or incorrectly produced items. Please contact us within 30 days of delivery if you experience any issues with your order.</p>
+      <h2>Limitation of Liability</h2>
+      <p>To the fullest extent permitted by law, Nathan Merch Co. shall not be liable for any indirect, incidental, or consequential damages arising from your use of our products or website.</p>
+      <h2>Changes to Terms</h2>
+      <p>We reserve the right to modify these terms at any time. Changes will be effective upon posting to the website. Continued use of our site constitutes acceptance of the revised terms.</p>
+      <h2>Contact</h2>
+      <p>For questions about these Terms, contact us at nathanandualem57@gmail.com.</p>
+    </div>
+  </section>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#page-home">NATHAN <span style="color:var(--accent)">MERCH CO.</span></a>
+      <p>Original graphic apparel and merchandise. Wear designs that stand out.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a href="#page-home">Home</a>
+      <a href="#page-about">About</a>
+      <a href="#page-products">Products</a>
+      <a href="#page-faq">FAQ</a>
+      <a href="#page-contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Collections</h4>
+      <a href="#page-products">Graphic T-Shirts</a>
+      <a href="#page-products">Hoodies</a>
+      <a href="#page-products">Sweatshirts</a>
+      <a href="#page-products">Accessories</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#page-privacy">Privacy Policy</a>
+      <a href="#page-terms">Terms of Service</a>
+      <a href="#page-contact">Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Nathan Merch Co. All rights reserved.</div>
+    <div class="footer-accent">// nathanandualem57@gmail.com</div>
+  </div>
+</footer>
+
+<script>
+  // FAQ accordion only — no page switching JS needed
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Contact form
+  function submitForm() {
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const msg = document.getElementById('contact-msg').value;
+    if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+    document.getElementById('form-success').style.display = 'block';
+    document.getElementById('contact-name').value = '';
+    document.getElementById('contact-email').value = '';
+    document.getElementById('contact-msg').value = '';
+  }
+
+  // Scroll to top on navigation
+  window.addEventListener('hashchange', function() { window.scrollTo(0, 0); });
+</script>
+</body>
+</html>
